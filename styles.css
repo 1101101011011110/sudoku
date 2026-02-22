@@ -36,6 +36,29 @@ h1 {
   max-height: 85vh;
 }
 
+.toolbar {
+  margin-top: 0.75rem;
+}
+
+.toolbar button {
+  padding: 0.4rem 1rem;
+  font-size: 0.95rem;
+  font-family: inherit;
+  color: #eee;
+  background: #0f3460;
+  border: 1px solid #2a2a4a;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.toolbar button:hover {
+  background: #1a4a7a;
+}
+
+.toolbar button:active {
+  background: #0a2840;
+}
+
 /* Main grid: 9×9 cells */
 .sudoku-grid {
   display: grid;
