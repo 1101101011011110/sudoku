@@ -146,6 +146,28 @@
       return candidates;
     }
 
+    var candidateGrid = [];
+    for (var i = 0; i < 81; i++) {
+      if (state[i]) {
+        candidateGrid[i] = [];
+      } else {
+        var row = Math.floor(i / 9);
+        var col = i % 9;
+        candidateGrid[i] = getCandidates(row, col);
+      }
+    }
+
+    function countInBlock(digit, blockRow, blockCol) {
+      var n = 0;
+      for (var r = blockRow * 3; r < blockRow * 3 + 3; r++) {
+        for (var c = blockCol * 3; c < blockCol * 3 + 3; c++) {
+          var idx = r * 9 + c;
+          if (candidateGrid[idx].indexOf(digit) !== -1) n++;
+        }
+      }
+      return n;
+    }
+
     cells.forEach(function (cell, idx) {
       cell.querySelectorAll('.digit').forEach(function (el) {
         el.classList.remove('hint-green');
@@ -153,11 +175,18 @@
       if (state[idx]) return;
       var row = Math.floor(idx / 9);
       var col = idx % 9;
-      var candidates = getCandidates(row, col);
-      if (candidates.length === 1) {
-        var digitEl = cell.querySelector('.digit[data-digit="' + candidates[0] + '"]');
-        if (digitEl) digitEl.classList.add('hint-green');
-      }
+      var blockRow = Math.floor(row / 3);
+      var blockCol = Math.floor(col / 3);
+      var candidates = candidateGrid[idx];
+
+      candidates.forEach(function (d) {
+        var onlyInCell = candidates.length === 1;
+        var uniqueInBlock = countInBlock(d, blockRow, blockCol) === 1;
+        if (onlyInCell || uniqueInBlock) {
+          var digitEl = cell.querySelector('.digit[data-digit="' + d + '"]');
+          if (digitEl) digitEl.classList.add('hint-green');
+        }
+      });
     });
   }
 
