@@ -1,0 +1,140 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  background: #1a1a2e;
+  color: #eee;
+}
+
+.app {
+  text-align: center;
+  padding: 1rem;
+}
+
+h1 {
+  margin: 0 0 1rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.sudoku-wrapper {
+  display: inline-block;
+  padding: 0.5rem;
+  background: #16213e;
+  border-radius: 8px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+  overflow: auto;
+  max-width: 95vw;
+  max-height: 85vh;
+}
+
+/* Main grid: 9×9 cells */
+.sudoku-grid {
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  grid-template-rows: repeat(9, 1fr);
+  gap: 0;
+  width: min(36em, 90vmin);
+  height: min(36em, 90vmin);
+  max-width: 100%;
+}
+
+/* Each cell: 3×3 digits (no lines inside the 1–9 grid) */
+.sudoku-cell {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 0;
+  background: #0f3460;
+  border: 1px solid #2a2a4a;
+  border-right-width: 1px;
+  border-bottom-width: 1px;
+  min-width: 0;
+  min-height: 0;
+}
+
+/* ---- Grid lines: thick for main 3×3 blocks, thin between cells ---- */
+/* Index = row*9 + col + 1 (1-based). Thick after columns 2 and 5, rows 2 and 5. */
+
+/* Thick (main 3×3 blocks): right border after columns 2 and 5 */
+.sudoku-cell:nth-child(9n+3),
+.sudoku-cell:nth-child(9n+6) {
+  border-right-width: 3px;
+  border-right-color: #4a6fa0;
+}
+
+/* Thick: bottom border after rows 2 and 5 */
+.sudoku-cell:nth-child(n+19):nth-child(-n+27),
+.sudoku-cell:nth-child(n+46):nth-child(-n+54) {
+  border-bottom-width: 3px;
+  border-bottom-color: #4a6fa0;
+}
+
+/* Thinner (between cells): default 1px; optional 2px for block-inner (every 3 in 9×9 = same as thick). So only thin (1px) and thick (3px). */
+
+/* Digit inside a cell: clickable 1–9 */
+.digit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #1a1a2e;
+  border: none;
+  margin: 0;
+  padding: 0;
+  font-size: clamp(0.5rem, 2vw, 1rem);
+  font-weight: 600;
+  color: #888;
+  cursor: pointer;
+  min-width: 0;
+  min-height: 0;
+  transition: color 0.15s, background 0.15s;
+}
+
+.digit:hover {
+  color: #ccc;
+  background: #252540;
+}
+
+.digit:active {
+  background: #2a2a4a;
+}
+
+/* Selected digit in this cell: red */
+.digit.selected {
+  color: #e94560;
+  background: rgba(233, 69, 96, 0.2);
+}
+
+.digit.selected:hover {
+  background: rgba(233, 69, 96, 0.3);
+}
+
+/* When a digit is selected, others in the same cell become almost invisible */
+.sudoku-cell.has-selection .digit:not(.selected) {
+  color: rgba(255, 255, 255, 0.08);
+  opacity: 0.2;
+}
+
+.sudoku-cell.has-selection .digit:not(.selected):hover {
+  color: rgba(255, 255, 255, 0.2);
+  opacity: 0.4;
+}
+
+/* Same digit in same row, column, or 3×3 block: lighter */
+.digit.same-unit-dimmed {
+  color: rgba(255, 255, 255, 0.12);
+  opacity: 0.25;
+}
+
+.digit.same-unit-dimmed:hover {
+  color: rgba(255, 255, 255, 0.25);
+  opacity: 0.45;
+}
