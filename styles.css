@@ -117,24 +117,18 @@ h1 {
   background: rgba(233, 69, 96, 0.3);
 }
 
-/* When a digit is selected, others in the same cell become almost invisible */
+/* When a digit is selected, others in the same cell become almost invisible and are not clickable */
 .sudoku-cell.has-selection .digit:not(.selected) {
   color: rgba(255, 255, 255, 0.08);
   opacity: 0.2;
+  pointer-events: none;
+  cursor: default;
 }
 
-.sudoku-cell.has-selection .digit:not(.selected):hover {
-  color: rgba(255, 255, 255, 0.2);
-  opacity: 0.4;
-}
-
-/* Same digit in same row, column, or 3×3 block: lighter */
+/* Same digit in same row, column, or 3×3 block: lighter and not clickable */
 .digit.same-unit-dimmed {
   color: rgba(255, 255, 255, 0.12);
   opacity: 0.25;
-}
-
-.digit.same-unit-dimmed:hover {
-  color: rgba(255, 255, 255, 0.25);
-  opacity: 0.45;
+  pointer-events: none;
+  cursor: default;
 }
