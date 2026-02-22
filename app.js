@@ -42,6 +42,7 @@
         }
         cell.classList.toggle('has-selection', !!cell.querySelector('.digit.selected'));
         updateSameUnitDimming();
+        updateHintGreen();
         saveState();
       });
 
@@ -86,6 +87,7 @@
       }
     }
     updateSameUnitDimming();
+    updateHintGreen();
   }
 
   function saveState() {
@@ -115,9 +117,48 @@
   }
 
   loadState();
+  updateHintGreen();
 
   if (resetBtn) {
     resetBtn.addEventListener('click', reset);
+  }
+
+  function updateHintGreen() {
+    var cells = gridEl.querySelectorAll('.sudoku-cell');
+    var state = getState();
+
+    function getCandidates(row, col) {
+      var candidates = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
+      var blockRow = Math.floor(row / 3);
+      var blockCol = Math.floor(col / 3);
+      for (var i = 0; i < 81; i++) {
+        var r = Math.floor(i / 9);
+        var c = i % 9;
+        if (r === row && c === col) continue;
+        var d = state[i];
+        if (!d) continue;
+        var sameBlock = Math.floor(r / 3) === blockRow && Math.floor(c / 3) === blockCol;
+        if (r === row || c === col || sameBlock) {
+          var idx = candidates.indexOf(d);
+          if (idx !== -1) candidates.splice(idx, 1);
+        }
+      }
+      return candidates;
+    }
+
+    cells.forEach(function (cell, idx) {
+      cell.querySelectorAll('.digit').forEach(function (el) {
+        el.classList.remove('hint-green');
+      });
+      if (state[idx]) return;
+      var row = Math.floor(idx / 9);
+      var col = idx % 9;
+      var candidates = getCandidates(row, col);
+      if (candidates.length === 1) {
+        var digitEl = cell.querySelector('.digit[data-digit="' + candidates[0] + '"]');
+        if (digitEl) digitEl.classList.add('hint-green');
+      }
+    });
   }
 
   function updateSameUnitDimming() {

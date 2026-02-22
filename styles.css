@@ -160,6 +160,16 @@ h1 {
   cursor: default;
 }
 
+/* Hint: non-selected digit that is the only candidate in its cell */
+.digit.hint-green {
+  color: #4ecca3 !important;
+  background: rgba(78, 204, 163, 0.2) !important;
+}
+
+.digit.hint-green:hover {
+  background: rgba(78, 204, 163, 0.35) !important;
+}
+
 /* Same digit in same row, column, or 3×3 block: lighter and not clickable */
 .digit.same-unit-dimmed {
   color: rgba(255, 255, 255, 0.12);
